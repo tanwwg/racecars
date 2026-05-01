@@ -977,15 +977,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   rb: {fileID: 446890351}
+  wheels:
+  - pos: {fileID: 1518574624}
+    isFront: 1
+    isRight: 0
+    rightSpeed: 0
+    rightForce: 0
+  - pos: {fileID: 1518574623}
+    isFront: 1
+    isRight: 1
+    rightSpeed: 0
+    rightForce: 0
+  - pos: {fileID: 1518574622}
+    isFront: 0
+    isRight: 0
+    rightSpeed: 0
+    rightForce: 0
+  - pos: {fileID: 1518574621}
+    isFront: 0
+    isRight: 1
+    rightSpeed: 0
+    rightForce: 0
   moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   brakeAction: {fileID: 0}
-  engineForce: 10000
+  engineForce: 4500
   turnTorque: 1000
   engineDragMultiplier: 5
   staticEngineDrag: 500
-  grip: 0
   drag: 1.1
-  lateralGrip: 500
+  grip: 400
+  maxGripForce: 4000
+  steerAngle: 45
   steerResponse: 2
   setSteering:
     m_PersistentCalls:
@@ -1018,15 +1040,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   steering: 0
-  thrust: 0
-  forwardTurnDrag: 0
-  forwardDrag: 0
-  engineDrag: 0
-  forwardVel: 0
-  lateralVel: 0
-  forwardForce: 0
-  lateralForce: 0
-  torqueForce: {x: 0, y: 0, z: 0}
 --- !u!1 &507728565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1649,7 +1662,7 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 156.20041, y: 2.9143844, z: -28.258518}
+  m_LocalPosition: {x: 150.47041, y: 1.3343842, z: -28.258518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2042,7 +2055,7 @@ Transform:
   m_GameObject: {fileID: 1304797748}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 156.20041, y: 2.9143844, z: -28.258518}
+  m_LocalPosition: {x: 150.47041, y: 1.3343842, z: -28.258518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2074,7 +2087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
   Damping: {x: 0, y: 0, z: 0}
-  ShoulderOffset: {x: 0, y: 2.42, z: -3.28}
+  ShoulderOffset: {x: 0, y: 0.84, z: 2.45}
   VerticalArmLength: 0.4
   CameraSide: 1
   CameraDistance: 2
@@ -2421,6 +2434,26 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 446890353}
   m_SourcePrefab: {fileID: 100100000, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+--- !u!4 &1518574621 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 28636839611146925, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+  m_PrefabInstance: {fileID: 1518574620}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1518574622 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9188640840458259854, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+  m_PrefabInstance: {fileID: 1518574620}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1518574623 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 948405438201742482, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+  m_PrefabInstance: {fileID: 1518574620}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1518574624 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3794951908810334882, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+  m_PrefabInstance: {fileID: 1518574620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1578753391
 PrefabInstance:
   m_ObjectHideFlags: 0
