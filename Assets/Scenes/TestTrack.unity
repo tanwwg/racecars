@@ -319,7 +319,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 256242277}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -441,6 +441,63 @@ MonoBehaviour:
   slipStart: 10
   slipMax: 30
   slip: 0
+  volumeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.0038328953
+      outSlope: 0.0038328953
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7011707
+      value: 0.0026875138
+      inSlope: 0.0038328953
+      outSlope: 1.6706156
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.3373983
+      outSlope: 3.3373983
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  pitchCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.4883766
+      outSlope: 1.4883766
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.006897
+      value: 1.498642
+      inSlope: 1.4883766
+      outSlope: 1.4883766
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &282165013
 GameObject:
   m_ObjectHideFlags: 0
@@ -1106,6 +1163,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   rb: {fileID: 446890351}
+  moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  brakeAction: {fileID: 0}
+  engineForce: 9000
+  engineDragMultiplier: 3
+  forwardDragMultiplier: 1.5
+  sideDragMultiplier: 4
+  grip: 400
+  maxGripForce: 6000
+  steerAngle: 60
+  steerResponse: 2
   wheels:
   - pos: {fileID: 1518574624}
     isFront: 1
@@ -1127,6 +1194,7 @@ MonoBehaviour:
           m_CallState: 2
     rightSpeed: 0
     rightForce: 0
+    gripUsed: 0
   - pos: {fileID: 1518574623}
     isFront: 1
     isRight: 1
@@ -1147,6 +1215,7 @@ MonoBehaviour:
           m_CallState: 2
     rightSpeed: 0
     rightForce: 0
+    gripUsed: 0
   - pos: {fileID: 1518574622}
     isFront: 0
     isRight: 0
@@ -1167,6 +1236,7 @@ MonoBehaviour:
           m_CallState: 2
     rightSpeed: 0
     rightForce: 0
+    gripUsed: 0
   - pos: {fileID: 1518574621}
     isFront: 0
     isRight: 1
@@ -1187,15 +1257,7 @@ MonoBehaviour:
           m_CallState: 2
     rightSpeed: 0
     rightForce: 0
-  moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  brakeAction: {fileID: 0}
-  engineForce: 9000
-  engineDragMultiplier: 5
-  drag: 0.8
-  grip: 400
-  maxGripForce: 10000
-  steerAngle: 45
-  steerResponse: 2
+    gripUsed: 0
   setSteering:
     m_PersistentCalls:
       m_Calls:
@@ -1226,6 +1288,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  setGripUsed:
+    m_PersistentCalls:
+      m_Calls: []
   steering: 0
 --- !u!1 &507728565
 GameObject:
@@ -1849,7 +1914,7 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 150.47041, y: 1.3343842, z: -28.258518}
+  m_LocalPosition: {x: 155.33041, y: 2.1443841, z: -28.258518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2242,7 +2307,7 @@ Transform:
   m_GameObject: {fileID: 1304797748}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 150.47041, y: 1.3343842, z: -28.258518}
+  m_LocalPosition: {x: 155.33041, y: 2.1443841, z: -28.258518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2274,9 +2339,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
   Damping: {x: 0, y: 0, z: 0}
-  ShoulderOffset: {x: 0, y: 0.84, z: 2.45}
+  ShoulderOffset: {x: 0, y: 1.65, z: -2.41}
   VerticalArmLength: 0.4
-  CameraSide: 1
+  CameraSide: 0.969
   CameraDistance: 2
   AvoidObstacles:
     Enabled: 0

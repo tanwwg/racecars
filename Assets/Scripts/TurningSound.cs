@@ -9,18 +9,15 @@ public class TurningSound : MonoBehaviour
     public float slipMax = 10f;    // full volume
 
     public float slip;
-    
-    
-    void Update()
+
+    public AnimationCurve volumeCurve;
+    public AnimationCurve pitchCurve;
+
+    public void SetGripUsed(float grip)
     {
-        this.slip = Mathf.Abs(Vector3.Dot(rb.linearVelocity, rb.transform.right));
-
-        float t = Mathf.InverseLerp(slipStart, slipMax, slip);
-
-        screechSource.volume = t;
-        screechSource.pitch = Mathf.Lerp(0.8f, 1.5f, t);
-
-        if (t > 0.05f)
+        screechSource.volume = volumeCurve.Evaluate(grip);
+        screechSource.pitch = pitchCurve.Evaluate(grip);
+        if (screechSource.volume > 0.05f)
         {
             if (!screechSource.isPlaying)
                 screechSource.Play();
@@ -30,4 +27,5 @@ public class TurningSound : MonoBehaviour
             screechSource.Stop();
         }
     }
+    
 }
