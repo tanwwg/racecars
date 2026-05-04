@@ -1,3 +1,4 @@
+using Unity.Mathematics.Geometry;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -8,6 +9,8 @@ public class WheelSetup
     public Transform pos;
     public bool isFront;
     public bool isRight;
+
+    public UnityEvent<float> setGripUsed;
 
     [Header("Calculations")] 
     public float rightSpeed;
@@ -28,9 +31,7 @@ public class CarController : MonoBehaviour
 
     [Header("Tuning")]
     public float engineForce = 500f;
-    public float turnTorque = 500f;
     public float engineDragMultiplier = 1.0f;
-    public float staticEngineDrag;
     public float drag = 2f;
 
     public float grip = 8f;
@@ -62,19 +63,36 @@ public class CarController : MonoBehaviour
     void ApplyWheel(WheelSetup wheel, Vector2 input)
     {
         Vector3 forward = rb.transform.forward;
-        if (wheel.isFront) forward = Quaternion.AngleAxis(steering * steerAngle, Vector3.up) * forward;
+        var thrust = input.y * engineForce;
+
+        if (wheel.isFront)
+        {
+            forward = Quaternion.AngleAxis(steering * steerAngle, Vector3.up) * forward;
+        }
+        else
+        {
+            thrust = 0;
+        }
         Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
         
         Vector3 velocity = rb.GetPointVelocity(wheel.pos.position);
         float forwardSpeed = Vector3.Dot(velocity, forward);
 
-        var thrust = input.y * engineForce;
         var airDrag = -Mathf.Pow(forwardSpeed, 2) * drag;
         var engineDrag = -engineDragMultiplier * forwardSpeed;
         var forwardForce = thrust + airDrag + engineDrag;
         
         wheel.rightSpeed = Vector3.Dot(velocity, right);
-        wheel.rightForce = Mathf.Clamp(-wheel.rightSpeed * grip, -maxGripForce, maxGripForce);
+        wheel.rightForce = -wheel.rightSpeed * grip;
+
+        // thrust + rightForce must be balanced my maxGripForce
+        if (Mathf.Abs(thrust) + Mathf.Abs(wheel.rightForce) > maxGripForce)
+        {
+            wheel.rightForce = Mathf.Sign(wheel.rightForce) * (maxGripForce - Mathf.Abs(thrust));
+        }
+        
+        float gripUsed = (Mathf.Abs(input.y * engineForce) + Mathf.Abs(wheel.rightForce)) / maxGripForce;
+        wheel.setGripUsed.Invoke(gripUsed);
         
         rb.AddForceAtPosition(forwardForce * forward + wheel.rightForce * right, wheel.pos.position, ForceMode.Force);
     }
