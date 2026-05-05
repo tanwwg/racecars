@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class LapTimer : MonoBehaviour
 {
@@ -8,12 +10,18 @@ public class LapTimer : MonoBehaviour
 
     private int currentLap = 0;
     private float lapStartTime;
-    private float bestLapTime = Mathf.Infinity;
     private float raceStartTime;
     private float totalRaceTime;
 
     private bool raceStarted = false;
     private float currentLapTime;
+
+    private List<float> lapTimes = new List<float>(); // List to store all lap times
+
+    private void Awake()
+    {
+        ResetRace();
+    }
 
     void Update()
     {
@@ -31,7 +39,7 @@ public class LapTimer : MonoBehaviour
     {
         if (!raceStarted)
         {
-            // start race
+            // Start race
             raceStarted = true;
             currentLap = 1;
             lapStartTime = Time.time;
@@ -46,8 +54,7 @@ public class LapTimer : MonoBehaviour
     {
         float lapTime = Time.time - lapStartTime;
 
-        if (lapTime < bestLapTime)
-            bestLapTime = lapTime;
+        lapTimes.Add(lapTime); // Add the completed lap time to the list
 
         currentLap++;
 
@@ -57,6 +64,12 @@ public class LapTimer : MonoBehaviour
             totalRaceTime = Time.time - raceStartTime; // Finalize total race time
             Debug.Log("Race finished!");
             Debug.Log($"Total Race Time: {FormatTime(totalRaceTime)}");
+
+            Debug.Log("Lap Times:");
+            foreach (var time in lapTimes)
+            {
+                Debug.Log(FormatTime(time));
+            }
             return;
         }
 
@@ -77,7 +90,12 @@ public class LapTimer : MonoBehaviour
                 // Display final times after the race ends
                 text += "Race Finished!\n";
                 text += $"Total Time: {FormatTime(currentTotalRaceTime)}\n";
-                text += $"Best Lap: {FormatTime(bestLapTime)}\n";
+
+                // Display all lap times
+                for (int i = 0; i < lapTimes.Count; i++)
+                {
+                    text += $"Lap {i + 1}: {FormatTime(lapTimes[i])}\n";
+                }
             }
             else
             {
@@ -90,12 +108,13 @@ public class LapTimer : MonoBehaviour
         {
             text += $"Lap: {currentLap}/{totalLaps}\n";
             text += $"Time: {FormatTime(lapTime)}\n";
-            text += $"Total Time: {FormatTime(currentTotalRaceTime)}\n"; // Always display the current total race time
+            text += $"Total Time: {FormatTime(currentTotalRaceTime)}\n";
 
-            if (bestLapTime < Mathf.Infinity)
-                text += $"Best: {FormatTime(bestLapTime)}\n";
-            else
-                text += $"Best: --:--.---\n";
+            // Display previous lap times dynamically
+            for (int i = 0; i < lapTimes.Count; i++)
+            {
+                text += $"Lap {i + 1}: {FormatTime(lapTimes[i])}\n";
+            }
         }
 
         infoText.text = text;
@@ -108,5 +127,25 @@ public class LapTimer : MonoBehaviour
         int milliseconds = Mathf.FloorToInt((time * 1000f) % 1000f);
 
         return $"{minutes:00}:{seconds:00}.{milliseconds:000}";
+    }
+
+    // Add this reset method in the LapTimer class
+    public void ResetRace()
+    {
+        // Reset all lap-related variables
+        currentLap = 0;
+        lapStartTime = 0f;
+        raceStartTime = 0f;
+        totalRaceTime = 0f;
+        raceStarted = false;
+        currentLapTime = 0f;
+
+        // Clear lap times list
+        lapTimes.Clear();
+
+        // Update the info text to the initial state
+        UpdateText(0f);
+
+        Debug.Log("Race has been reset.");
     }
 }
