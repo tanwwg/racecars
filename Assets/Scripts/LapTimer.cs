@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class LapTimer : MonoBehaviour
 {
     public int totalLaps = 3;
     public TMP_Text infoText;
-    [SerializeField] private RaceLeaderboardManager leaderboardManager;
 
     private int currentLap = 0;
     private float lapStartTime;
@@ -18,14 +18,12 @@ public class LapTimer : MonoBehaviour
     private float currentLapTime;
 
     private List<float> lapTimes = new List<float>(); // List to store all lap times
+    
+    
+    public UnityEvent<float> onRaceEnded;
 
     private void Awake()
     {
-        if (leaderboardManager == null)
-        {
-            leaderboardManager = FindFirstObjectByType<RaceLeaderboardManager>();
-        }
-
         ResetRace();
     }
 
@@ -77,10 +75,7 @@ public class LapTimer : MonoBehaviour
                 Debug.Log(FormatTime(time));
             }
 
-            if (leaderboardManager != null)
-            {
-                leaderboardManager.SubmitRaceTime(totalRaceTime);
-            }
+            onRaceEnded.Invoke(totalRaceTime);
             return;
         }
 

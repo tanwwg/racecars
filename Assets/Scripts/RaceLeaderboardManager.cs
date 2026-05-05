@@ -18,6 +18,8 @@ public class RaceLeaderboardManager : MonoBehaviour
     private bool isRefreshing;
     private bool isSubmitting;
 
+    private string loggedInPlayerName; // Store the logged-in player's name
+
     private async void Start()
     {
         try
@@ -32,7 +34,14 @@ public class RaceLeaderboardManager : MonoBehaviour
 
     public async void SubmitRaceTime(float totalRaceTimeSeconds)
     {
-        await SubmitRaceTimeAsync(totalRaceTimeSeconds);
+        try
+        {
+            await SubmitRaceTimeAsync(totalRaceTimeSeconds);
+        }
+        catch (Exception e)
+        {
+            SetLeaderboardText(e.Message);
+        }
     }
 
     public async Task SubmitRaceTimeAsync(float totalRaceTimeSeconds)
@@ -125,6 +134,13 @@ public class RaceLeaderboardManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
+
+        // Fetch the logged-in player's name after signing in
+        loggedInPlayerName = await AuthenticationService.Instance.GetPlayerNameAsync();
+        if (string.IsNullOrWhiteSpace(loggedInPlayerName))
+        {
+            loggedInPlayerName = "You"; // Default to "You" if no name is available
+        }
     }
 
     private bool HasLeaderboardId()
@@ -143,12 +159,15 @@ public class RaceLeaderboardManager : MonoBehaviour
     {
         if (scores == null || scores.Results == null || scores.Results.Count == 0)
         {
-            SetLeaderboardText("No leaderboard times yet.");
+            SetLeaderboardText($"Your Player Name: {loggedInPlayerName}\nNo leaderboard times yet.");
             return;
         }
 
         StringBuilder builder = new StringBuilder();
         builder.AppendLine("Top Times");
+
+        // Display the logged-in player's name
+        builder.AppendLine($"Your Player Name: {loggedInPlayerName}");
 
         foreach (LeaderboardEntry entry in scores.Results)
         {
