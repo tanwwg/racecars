@@ -7,6 +7,7 @@ public class LapTimer : MonoBehaviour
 {
     public int totalLaps = 3;
     public TMP_Text infoText;
+    [SerializeField] private RaceLeaderboardManager leaderboardManager;
 
     private int currentLap = 0;
     private float lapStartTime;
@@ -20,6 +21,11 @@ public class LapTimer : MonoBehaviour
 
     private void Awake()
     {
+        if (leaderboardManager == null)
+        {
+            leaderboardManager = FindFirstObjectByType<RaceLeaderboardManager>();
+        }
+
         ResetRace();
     }
 
@@ -69,6 +75,11 @@ public class LapTimer : MonoBehaviour
             foreach (var time in lapTimes)
             {
                 Debug.Log(FormatTime(time));
+            }
+
+            if (leaderboardManager != null)
+            {
+                leaderboardManager.SubmitRaceTime(totalRaceTime);
             }
             return;
         }
