@@ -27,6 +27,28 @@
                     "action": "MenuButton",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "950be35c-3535-4e73-8da4-13a77fc01921",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c2def477-896c-4fe2-a04d-f126310981af",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
