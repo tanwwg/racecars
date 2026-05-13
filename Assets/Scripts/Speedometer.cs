@@ -7,34 +7,35 @@ public class Speedometer : MonoBehaviour
     [SerializeField] private TMP_Text speedText;
 
     [Header("Display")]
-    [SerializeField] private bool useKmh = true;
     [SerializeField] private int decimalPlaces = 0;
+    
+    private Vector3? _lastPosition;
 
-    private Vector3 _lastPosition;
-    private bool _hasLastPosition;
+    float Distance(Vector3 pos1, Vector3 pos2)
+    {
+        var diff = pos1 - pos2;
+        var distSq = (diff.x * diff.x) + (diff.y * diff.y) + (diff.z * diff.z);
+        return Mathf.Sqrt(distSq);
+    }
+
+    float ToKmh(float mps)
+    {
+        return mps * 3.6f;
+    }
 
     private void LateUpdate()
     {
-        if (target == null || speedText == null)
-            return;
-
-        if (!_hasLastPosition)
+        if (!_lastPosition.HasValue)
         {
             _lastPosition = target.position;
-            _hasLastPosition = true;
             return;
         }
 
-        float distance = Vector3.Distance(target.position, _lastPosition);
+        float distance = Distance(target.position, _lastPosition.Value);
         float speedMetersPerSecond = distance / Time.deltaTime;
+        float kmh = ToKmh(speedMetersPerSecond);
 
-        float displaySpeed = useKmh
-            ? speedMetersPerSecond * 3.6f
-            : speedMetersPerSecond;
-
-        string unit = useKmh ? "km/h" : "m/s";
-
-        speedText.text = $"{displaySpeed.ToString($"F{decimalPlaces}")} {unit}";
+        speedText.text = $"{kmh.ToString($"F{decimalPlaces}")} km/h";
 
         _lastPosition = target.position;
     }
